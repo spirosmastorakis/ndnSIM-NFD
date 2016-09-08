@@ -27,8 +27,17 @@
 #include "core/network-interface.hpp"
 #include "core/network-interface-predicate.hpp"
 #include "face/generic-link-service.hpp"
+
+#include "face/protocol-factory.hpp"
+
+#ifdef HAVE_TCP
 #include "face/tcp-factory.hpp"
+#endif // HAVE_TCP
+
+#ifdef HAVE_UDP
 #include "face/udp-factory.hpp"
+#endif // HAVE_UDP
+
 #include "fw/face-table.hpp"
 
 #include <ndn-cxx/lp/tags.hpp>
@@ -656,6 +665,7 @@ FaceManager::processSectionTcp(const ConfigSection& configSection, bool isDryRun
   //   port 6363 ; TCP listener port number
   // }
 
+#if defined(HAVE_TCP)
   uint16_t port = 6363;
   bool needToListen = true;
   bool enableV4 = true;
@@ -715,6 +725,9 @@ FaceManager::processSectionTcp(const ConfigSection& configSection, bool isDryRun
       m_factories.insert(std::make_pair("tcp6", factory));
     }
   }
+#else
+  BOOST_THROW_EXCEPTION(ConfigFile::Error("NFD was compiled without TCP support, cannot process \"tcp\" section"));
+#endif // HAVE_TCP
 }
 
 void
@@ -734,6 +747,7 @@ FaceManager::processSectionUdp(const ConfigSection& configSection, bool isDryRun
   //   mcast_group 224.0.23.170 ; UDP multicast group (IPv4 only)
   // }
 
+#if defined(HAVE_UDP)
   uint16_t port = 6363;
   bool enableV4 = true;
   bool enableV6 = true;
@@ -870,6 +884,9 @@ FaceManager::processSectionUdp(const ConfigSection& configSection, bool isDryRun
       face->close();
     }
   }
+#else
+  BOOST_THROW_EXCEPTION(ConfigFile::Error("NFD was compiled without UDP support, cannot process \"udp\" section"));
+#endif // HAVE_UDP
 }
 
 void
