@@ -26,11 +26,30 @@
 #ifndef NFD_CORE_LOGGER_HPP
 #define NFD_CORE_LOGGER_HPP
 
+#include "common.hpp"
 #include "ns3/log.h"
 
 namespace nfd {
 
 #define NFD_LOG_INIT(name) NS_LOG_COMPONENT_DEFINE("nfd." name);
+
+#define NFD_LOG_INCLASS_DECLARE() \
+static ns3::LogComponent g_log
+
+#define NFD_LOG_INCLASS_DEFINE(cls, name) \
+ns3::LogComponent cls::g_log = ns3::LogComponent ("nfd." name, __FILE__)
+
+#define NFD_LOG_INCLASS_TEMPLATE_DEFINE(cls, name) \
+template<class T>                                  \
+ns3::LogComponent cls<T>::g_log = ns3::LogComponent ("nfd." name, __FILE__)
+
+#define NFD_LOG_INCLASS_TEMPLATE_SPECIALIZATION_DEFINE(cls, specialization, name) \
+template<>                                                                        \
+ns3::LogComponent cls<specialization>::g_log = ns3::LogComponent ("nfd." name, __FILE__)
+
+#define NFD_LOG_INCLASS_2TEMPLATE_SPECIALIZATION_DEFINE(cls, s1, s2, name) \
+template<>                                                                 \
+s3::LogComponent cls<s1, s2>::g_log = ns3::LogComponent ("nfd." name, __FILE__)
 
 #define NFD_LOG_TRACE(expression) NS_LOG_LOGIC(expression)
 #define NFD_LOG_DEBUG(expression) NS_LOG_DEBUG(expression)
