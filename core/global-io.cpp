@@ -1,11 +1,12 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /**
- * Copyright (c) 2014  Regents of the University of California,
- *                     Arizona Board of Regents,
- *                     Colorado State University,
- *                     University Pierre & Marie Curie, Sorbonne University,
- *                     Washington University in St. Louis,
- *                     Beijing Institute of Technology
+ * Copyright (c) 2014-2015,  Regents of the University of California,
+ *                           Arizona Board of Regents,
+ *                           Colorado State University,
+ *                           University Pierre & Marie Curie, Sorbonne University,
+ *                           Washington University in St. Louis,
+ *                           Beijing Institute of Technology,
+ *                           The University of Memphis.
  *
  * This file is part of NFD (Named Data Networking Forwarding Daemon).
  * See AUTHORS.md for complete list of NFD authors and contributors.
@@ -20,37 +21,34 @@
  *
  * You should have received a copy of the GNU General Public License along with
  * NFD, e.g., in COPYING.md file.  If not, see <http://www.gnu.org/licenses/>.
- **/
+ */
 
-#ifndef NFD_CORE_GLOBAL_IO_HPP
-#define NFD_CORE_GLOBAL_IO_HPP
-
-#include "common.hpp"
+#include "global-io.hpp"
+#include "scheduler.hpp"
 
 namespace nfd {
 
 namespace detail {
 
-/**
- * @brief Simulator-based IO that implements a few interfaces from boost::asio::io_service
- */
-class SimulatorIo
+void
+SimulatorIo::post(const std::function<void()>& callback)
 {
-public:
-  void
-  post(const std::function<void()>& callback);
+  scheduler::schedule(time::seconds(0), callback);
+}
 
-  void
-  dispatch(const std::function<void()>& callback);
-};
+void
+SimulatorIodispatch(const std::function<void()>& callback)
+{
+  scheduler::schedule(time::seconds(0), callback);
+}
 
 } // namespace detail
 
-/** \return Simulator-based IO object
- */
 detail::SimulatorIo&
-getGlobalIoService();
+getGlobalIoService()
+{
+  static detail::SimulatorIo io;
+  return io;
+}
 
 } // namespace nfd
-
-#endif // NFD_CORE_GLOBAL_IO_HPP
