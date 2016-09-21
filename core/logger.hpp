@@ -57,7 +57,6 @@ s3::LogComponent cls<s1, s2>::g_log = ns3::LogComponent ("nfd." name, __FILE__)
 #define NFD_LOG_ERROR(expression) NS_LOG_ERROR(expression)
 #define NFD_LOG_WARN(expression) NS_LOG_WARN(expression)
 #define NFD_LOG_FATAL(expression) NS_LOG_FATAL(expression)
->>>>>>> c082166... [ndnSIM] core: Replace NFD logger with NS3 logging facility
 
 } // namespace nfd
 

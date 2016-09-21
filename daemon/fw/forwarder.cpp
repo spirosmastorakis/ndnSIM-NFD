@@ -49,7 +49,6 @@ Forwarder::Forwarder()
 {
   fw::installStrategies(*this);
   getFaceTable().addReserved(m_csFace, face::FACEID_CONTENT_STORE);
-}
 
   m_faceTable.afterAdd.connect([this] (Face& face) {
     face.afterReceiveInterest.connect(
@@ -245,8 +244,8 @@ Forwarder::onContentStoreHit(const Face& inFace, const shared_ptr<pit::Entry>& p
   NFD_LOG_DEBUG("onContentStoreHit interest=" << interest.getName());
 
   beforeSatisfyInterest(*pitEntry, *m_csFace, data);
-  this->dispatchToStrategy(pitEntry, bind(&Strategy::beforeSatisfyInterest, _1,
-                                          pitEntry, cref(*m_csFace), cref(data)));
+  this->dispatchToStrategy(*pitEntry,
+    [&] (fw::Strategy& strategy) { strategy.beforeSatisfyInterest(pitEntry, cref(*m_csFace), cref(data)); });
 
   data.setTag(make_shared<lp::IncomingFaceIdTag>(face::FACEID_CONTENT_STORE));
   // XXX should we lookup PIT for other Interests that also match csMatch?
