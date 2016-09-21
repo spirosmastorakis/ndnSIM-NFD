@@ -311,90 +311,13 @@ private:
   NetworkRegionTable m_networkRegionTable;
   shared_ptr<Face>   m_csFace;
 
-<<<<<<< HEAD
-=======
   ns3::Ptr<ns3::ndn::ContentStore> m_csFromNdnSim;
 
   static const Name LOCALHOST_NAME;
 
->>>>>>> 31d4a08... [ndnSIM] fw: Keep both the CS of NFD and ndnSIM
   // allow Strategy (base class) to enter pipelines
   friend class fw::Strategy;
 };
-
-<<<<<<< HEAD
-=======
-inline const ForwarderCounters&
-Forwarder::getCounters() const
-{
-  return m_counters;
-}
-
-inline FaceTable&
-Forwarder::getFaceTable()
-{
-  return m_faceTable;
-}
-
-inline shared_ptr<Face>
-Forwarder::getFace(FaceId id) const
-{
-  return m_faceTable.get(id);
-}
-
-inline void
-Forwarder::addFace(shared_ptr<Face> face)
-{
-  m_faceTable.add(face);
-}
-
-inline NameTree&
-Forwarder::getNameTree()
-{
-  return m_nameTree;
-}
-
-inline Fib&
-Forwarder::getFib()
-{
-  return m_fib;
-}
-
-inline Pit&
-Forwarder::getPit()
-{
-  return m_pit;
-}
-
-inline Cs&
-Forwarder::getCs()
-{
-  return m_cs;
-}
-
-inline Measurements&
-Forwarder::getMeasurements()
-{
-  return m_measurements;
-}
-
-inline StrategyChoice&
-Forwarder::getStrategyChoice()
-{
-  return m_strategyChoice;
-}
-
-inline DeadNonceList&
-Forwarder::getDeadNonceList()
-{
-  return m_deadNonceList;
-}
-
-inline NetworkRegionTable&
-Forwarder::getNetworkRegionTable()
-{
-  return m_networkRegionTable;
-}
 
 inline void
 Forwarder::setCsFromNdnSim(ns3::Ptr<ns3::ndn::ContentStore> cs)
@@ -402,20 +325,6 @@ Forwarder::setCsFromNdnSim(ns3::Ptr<ns3::ndn::ContentStore> cs)
   m_csFromNdnSim = cs;
 }
 
-#ifdef WITH_TESTS
-inline void
-Forwarder::dispatchToStrategy(shared_ptr<pit::Entry> pitEntry, function<void(fw::Strategy*)> trigger)
-#else
-template<class Function>
-inline void
-Forwarder::dispatchToStrategy(shared_ptr<pit::Entry> pitEntry, Function trigger)
-#endif
-{
-  fw::Strategy& strategy = m_strategyChoice.findEffectiveStrategy(*pitEntry);
-  trigger(&strategy);
-}
-
->>>>>>> 31d4a08... [ndnSIM] fw: Keep both the CS of NFD and ndnSIM
 } // namespace nfd
 
 #endif // NFD_DAEMON_FW_FORWARDER_HPP
