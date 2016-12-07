@@ -192,6 +192,14 @@ public:
   /** \note The default argument is needed to ensure FIB and StrategyChoice iterators
    *        are default-constructible.
    */
+  GetTableEntry()
+  : m_getter(nullptr)
+  {
+    // Workaround for ability to default-construct the iterator
+    // See https://redmine.named-data.net/issues/3882
+    // Note that behavior is undefined for dereferencing of the default-constructed iterator
+  }
+
   explicit
   GetTableEntry(Getter getter = nullptr)
     : m_getter(getter)
